@@ -1,0 +1,23 @@
+{
+  "name": "hopper-upload-server",
+  "version": "1.0.0",
+  "description": "NodeJS TUS Upload Server for Hopper",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alfiedawes/hopper-upload-server.git"
+  },
+  "author": "Alfie Dawes",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alfiedawes/hopper-upload-server/issues"
+  },
+  "homepage": "https://github.com/alfiedawes/hopper-upload-server#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "tus-node-server": "^0.2.11"
+  }
+}
