@@ -1,26 +1,41 @@
 const tus = require('tus-node-server');
-const express = require('express')
 const server = new tus.Server();
+const EVENTS = require('tus-node-server').EVENTS;
+
+const metadataStringToObject = (stringValue) => {
+  const keyValuePairList = stringValue.split(',');
+  return keyValuePairList.reduce((metadata, keyValuePair) => {
+    let [key, base64Value] = keyValuePair.split(' ');
+    metadata[key] = new Buffer(base64Value, "base64").toString("ascii");
+    return metadata;
+  }, {})
+}
 
 
 /*
 server.datastore = new tus.FileStore({
-    path: 'D:/Dropbox (The Box)/BOX Projects/XOB013 Hopper/3. Project files/Code/hopper-upload-server/files'
+  path: '/temp'
 });
 */
+
+
+
 server.datastore = new tus.GCSDataStore({
-    path: '/',
+    path: '/temp',
     projectId: 'hopper-203813',
     bucket: 'hopper-images',
 });
 
 
-server.on(tus.EVENTS.EVENT_UPLOAD_COMPLETE, (event) => {
-    console.log(`[${new Date().toLocaleTimeString()}] [EVENT HOOK] Upload complete for file ${event.file.id}`);
+server.on(EVENTS.EVENT_UPLOAD_COMPLETE, (event) => {
+  var metadata = metadataStringToObject(event.file.upload_metadata);
+  console.log(event.file.id);
+  console.log('Upload complete for file ' + metadata.campaign);
 });
 
-var app = express();
-const uploadApp = express();
-uploadApp.all('*', server.handle.bind(server));
-app.use('/uploads', uploadApp);
-app.listen(3000, () => console.log('Example app listening on port 3000!'));
+
+const host = '127.0.0.1';
+const port = 8000;
+server.listen({ host, port }, () => {
+    console.log(`[${new Date().toLocaleTimeString()}] tus server listening at http://${host}:${port}`);
+});
