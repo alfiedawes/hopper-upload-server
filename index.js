@@ -1,32 +1,26 @@
-const express = require('express')
 const tus = require('tus-node-server');
-
+const express = require('express')
 const server = new tus.Server();
 
 
+/*
+server.datastore = new tus.FileStore({
+    path: 'D:/Dropbox (The Box)/BOX Projects/XOB013 Hopper/3. Project files/Code/hopper-upload-server/files'
+});
+*/
+server.datastore = new tus.GCSDataStore({
+    path: '/',
+    projectId: 'hopper-203813',
+    bucket: 'hopper-images',
+});
+
+
+server.on(tus.EVENTS.EVENT_UPLOAD_COMPLETE, (event) => {
+    console.log(`[${new Date().toLocaleTimeString()}] [EVENT HOOK] Upload complete for file ${event.file.id}`);
+});
 
 var app = express();
 const uploadApp = express();
-
-uploadApp.all('*', function(req, res){
-  res.send('video upload for campaign: ' + req.params.campaignID);
-  /*
-  server.datastore = new tus.FileStore({
-      path: '/files'
-  });
-  server.handle.bind(server);
-  */
-});
-
-app.use('/upload/:campaign', uploadApp);
-
-app.get('/video/:campaignID/:videoID', function(req, res){
-  res.send('Return Video for campaign ' + req.params.campaignID + ' with ID ' + req.params.videoID);
-});
-
-app.get('/img/:campaignID/:imgID', function(req, res){
-  res.send('Return Image for campaign ' + req.params.campaignID + '  with ID ' + req.params.imgID);
-});
-
-
+uploadApp.all('*', server.handle.bind(server));
+app.use('/uploads', uploadApp);
 app.listen(3000, () => console.log('Example app listening on port 3000!'));
