@@ -12,20 +12,20 @@ const metadataStringToObject = (stringValue) => {
 }
 
 
-/*
+
 server.datastore = new tus.FileStore({
   path: '/temp'
 });
-*/
 
 
 
+/*
 server.datastore = new tus.GCSDataStore({
     path: '/temp',
     projectId: 'hopper-203813',
     bucket: 'hopper-images',
 });
-
+*/
 
 server.on(EVENTS.EVENT_UPLOAD_COMPLETE, (event) => {
   var metadata = metadataStringToObject(event.file.upload_metadata);
