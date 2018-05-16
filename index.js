@@ -1,7 +1,7 @@
 const tus = require('tus-node-server');
 const server = new tus.Server();
 const EVENTS = require('tus-node-server').EVENTS;
-
+var os = require("os");
 const metadataStringToObject = (stringValue) => {
   const keyValuePairList = stringValue.split(',');
   return keyValuePairList.reduce((metadata, keyValuePair) => {
@@ -34,7 +34,7 @@ server.on(EVENTS.EVENT_UPLOAD_COMPLETE, (event) => {
 });
 
 
-const host = '127.0.0.1';
+const host = os.hostname();
 const port = 8000;
 server.listen({ host, port }, () => {
     console.log(`[${new Date().toLocaleTimeString()}] tus server listening at http://${host}:${port}`);
