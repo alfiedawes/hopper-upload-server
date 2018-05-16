@@ -39,3 +39,9 @@ const port = 8000;
 server.listen({ port }, () => {
     console.log(`[${new Date().toLocaleTimeString()}] tus server listening at ${port}`);
 });
+
+
+server.get('/', (req, res) => {
+  res.write('hello!');
+  res.end();
+});
