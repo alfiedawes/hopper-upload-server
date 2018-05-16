@@ -36,6 +36,6 @@ server.on(EVENTS.EVENT_UPLOAD_COMPLETE, (event) => {
 
 const host = os.hostname();
 const port = 8000;
-server.listen({ host, port }, () => {
-    console.log(`[${new Date().toLocaleTimeString()}] tus server listening at http://${host}:${port}`);
+server.listen({ port }, () => {
+    console.log(`[${new Date().toLocaleTimeString()}] tus server listening at ${port}`);
 });
